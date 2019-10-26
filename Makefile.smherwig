@@ -40,7 +40,7 @@ INSTALL_BIN= $(INSTALL_TOP)/bin
 
 # Headers to intsall
 #----------------------------------------------------------
-TO_INC= $(addprefix build_generic/include/, \
+TO_INC= $(addprefix include/, \
 	ext4_balloc.h \
 	ext4_bcache.h \
 	ext4_bitmap.h \
@@ -73,7 +73,7 @@ TO_INC_GENERATED= $(addprefix build_generic/include/generated/, \
 	ext4_config.h \
 	)
 
-TO_INC_MISC= $(addprefix build_generic/include/misc/, \
+TO_INC_MISC= $(addprefix include/misc/, \
 	queue.h \
 	tree.h \
 	)
