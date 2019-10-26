@@ -1,0 +1,118 @@
+# Since nextfsserver and makefs.py both use parts of lwext4, I wanted
+# to install lwext4 to a common location.  It wasn't clear to me
+# how to install lwext4 to somewhere other than /usr/bin (I submitted
+# an issue (pending) one github (issue #48)).  Thus, I created this
+# "wrapper" Makefile.  
+#
+# The build for lwext4 is also slightly non-intuitive,
+# as you have to enter make twice, so this "wrapper" also handles that.
+#
+# To use this Makefile, just type `make -f Makefile.smherwig`
+
+# == CHANGE THE SETTINGS BELOW TO SUIT YOUR ENVIRONMENT
+
+# Utilities
+#----------------------------------------------------------
+RM= rm -f
+MKDIR= mkdir -p
+INSTALL= install -p
+INSTALL_EXEC= $(INSTALL) -m 0755
+INSTALL_DATA= $(INSTALL) -m 0644
+
+# If you don't have install, you can use "cp" instead.
+# 
+# INSTALL= cp -p
+# INSTAL_EXEC= $(INSTALL)
+# INSTAL_DATA= $(INSTALL)
+
+
+# Install Location
+# See, also, the local target
+#----------------------------------------------------------
+INSTALL_TOP= /usr/local
+INSTALL_INC= $(INSTALL_TOP)/include
+INSTALL_INC_GENERATED= $(INSTALL_TOP)/include/generated
+INSTALL_INC_MISC = $(INSTALL_TOP)/include/misc
+INSTALL_LIB= $(INSTALL_TOP)/lib
+INSTALL_BIN= $(INSTALL_TOP)/bin
+
+# == END OF USER SETTINGS -- NO NEED TO CHANGE ANYTHING BELOW THIS LINE =======
+
+# Headers to intsall
+#----------------------------------------------------------
+TO_INC= $(addprefix build_generic/include/, \
+	ext4_balloc.h \
+	ext4_bcache.h \
+	ext4_bitmap.h \
+	ext4_blockdev.h \
+	ext4_block_group.h \
+	ext4_config.h \
+	ext4_crc32.h \
+	ext4_debug.h \
+	ext4_dir.h \
+	ext4_dir_idx.h \
+	ext4_errno.h \
+	ext4_extent.h \
+	ext4_fs.h \
+	ext4.h \
+	ext4_hash.h \
+	ext4_ialloc.h \
+	ext4_inode.h \
+	ext4_journal.h \
+	ext4_mbr.h \
+	ext4_misc.h \
+	ext4_mkfs.h \
+	ext4_oflags.h \
+	ext4_super.h \
+	ext4_trans.h \
+	ext4_types.h \
+	ext4_xattr.h \
+	)
+
+TO_INC_GENERATED= $(addprefix build_generic/include/generated/, \
+	ext4_config.h \
+	)
+
+TO_INC_MISC= $(addprefix build_generic/include/misc/, \
+	queue.h \
+	tree.h \
+	)
+
+# Library to install
+#----------------------------------------------------------
+TO_LIB= build_generic/src/liblwext4.a
+
+# Executables to install
+#----------------------------------------------------------
+TO_BIN= $(addprefix build_generic/fs_test/, \
+	lwext4-client \
+	lwext4-generic \
+	lwext4-mbr \
+	lwext4-mkfs \
+	lwext4-server \
+	)
+
+# Targets start here
+#----------------------------------------------------------
+all:
+	$(MAKE) generic
+	cd build_generic; $(MAKE)
+
+clean:
+	$(MAKE) clean
+
+install:
+	$(MKDIR) $(INSTALL_INC) $(INSTALL_INC_GENERATED) $(INSTALL_INC_MISC) \
+		$(INSTALL_LIB) $(INSTALL_BIN)
+	$(INSTALL_DATA) $(TO_INC) $(INSTALL_INC)
+	$(INSTALL_DATA) $(TO_INC_GENERATED) $(INSTALL_INC_GENERATED)
+	$(INSTALL_DATA) $(TO_INC_MISC) $(INSTALL_INC_MISC)
+	$(INSTALL_DATA) $(TO_LIB) $(INSTALL_LIB)
+	$(INSTALL_EXEC) $(TO_BIN) $(INSTALL_BIN)
+
+uninstall:
+	cd $(INSTALL_INC) && $(RM) $(TO_INC)
+	cd $(INSTALL_LIB) && $(RM) $(TO_LIB)
+	cd $(INSTALL_BIN) && $(RM) $(TO_BIN)
+
+.PHONY: all clean install uninstall
