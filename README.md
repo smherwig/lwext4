@@ -135,8 +135,8 @@ Package installation (Debian):
  sudo make install
  ```
 
-<a name="phoenix-compile">Phoenix Compile & install tools
----------------------------------------------------------
+<a name="phoenix-compile"/>Phoenix compile & install tools
+----------------------------------------------------------
 The [standard](#compile) installation method above is inflexible.  While
 developing the [Phoenix](https://github.com/smherwig/phoenix) SGX Microkernel,
 I added the `Makefile.smherwig` to allow for installing to a customized
