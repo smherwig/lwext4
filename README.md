@@ -126,14 +126,29 @@ Package installation (Debian):
  apt-get install make gcc cmake p7zip
   ```
  
-Compile & install tools
-------------
+<a name="compile"/> Compile & install tools
+-------------------------------------------
 ```bash
  make generic
  cd build_generic
  make
  sudo make install
  ```
+
+<a name="phoenix-compile">Phoenix Compile & install tools
+---------------------------------------------------------
+The [standard](#compile) installation method above is inflexible.  While
+developing the [Phoenix](https://github.com/smherwig/phoenix) SGX Microkernel,
+I added the `Makefile.smherwig` to allow for installing to a customized
+location -- here, the user's home directory.
+
+```
+cd ~/src
+git clone https://github.com/smherwig/lwext4
+cd lwext4
+make -f Makefile.smherwig
+make -f Makefile.smherwig install INSTALL_TOP=$HOME
+```
 
 lwext4-generic demo application
 =====
